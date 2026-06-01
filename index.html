@@ -1,33 +1,601 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Ocean</title>
+    <title>Anıl — Industrial Engineering × Software</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(to top left, #28b487, #7dd56f);
-        }
+      :root {
+        --bg: #0b0b0d;
+        --surface: #121215;
+        --text: #ece6db;
+        --muted: #8a857c;
+        --faint: #3a3833;
+        --accent: #ff6a3d;
+        --line: rgba(236, 230, 219, 0.1);
+        --mono: "IBM Plex Mono", monospace;
+        --sans: "IBM Plex Sans", sans-serif;
+        --display: "Bricolage Grotesque", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        background-image: radial-gradient(
+          rgba(236, 230, 219, 0.04) 1px,
+          transparent 1px
+        );
+        background-size: 32px 32px;
+        overflow-x: hidden;
+      }
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 28px;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
 
-        h1 {
-            font-family: sans-serif;
-            font-size: 50px;
-            line-height: 1.3;
-            width: 100%;
-            padding: 30px;
-            text-align: center;
-            color: white;
+      /* nav */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        backdrop-filter: blur(10px);
+        background: rgba(11, 11, 13, 0.72);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 62px;
+      }
+      .logo {
+        font-family: var(--mono);
+        font-size: 14px;
+        letter-spacing: 0.04em;
+      }
+      .logo b {
+        color: var(--accent);
+      }
+      .nav ul {
+        display: flex;
+        gap: 30px;
+        list-style: none;
+      }
+      .nav ul a {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .nav ul a:hover {
+        color: var(--text);
+      }
+      @media (max-width: 640px) {
+        .nav ul {
+          display: none;
         }
+      }
+
+      section {
+        padding: 110px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .label {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 34px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .label::before {
+        content: "";
+        width: 30px;
+        height: 1px;
+        background: var(--accent);
+      }
+
+      .hero {
+        padding: 150px 0 120px;
+        border-bottom: 1px solid var(--line);
+      }
+      .kicker {
+        font-family: var(--mono);
+        font-size: 13px;
+        letter-spacing: 0.16em;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 26px;
+      }
+      .hero h1 {
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: clamp(2.6rem, 7vw, 5.4rem);
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+        max-width: 18ch;
+      }
+      .hero h1 .o {
+        color: var(--accent);
+      }
+      .hero p {
+        margin-top: 30px;
+        max-width: 54ch;
+        font-size: 1.12rem;
+        color: var(--muted);
+      }
+      .cta {
+        display: flex;
+        gap: 16px;
+        margin-top: 42px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        font-family: var(--mono);
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        padding: 13px 22px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        transition: all 0.2s;
+      }
+      .btn:hover {
+        border-color: var(--text);
+        transform: translateY(-2px);
+      }
+      .btn.primary {
+        background: var(--accent);
+        color: #0b0b0d;
+        border-color: var(--accent);
+        font-weight: 500;
+      }
+      .btn.primary:hover {
+        filter: brightness(1.08);
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+      }
+      .about-grid p {
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+      .about-grid p + p {
+        margin-top: 18px;
+      }
+      @media (max-width: 760px) {
+        .about-grid {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+      }
+
+      .proj {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 34px;
+        padding: 34px 0;
+        border-top: 1px solid var(--line);
+        transition: all 0.25s;
+      }
+      .proj:hover {
+        padding-left: 10px;
+      }
+      .proj:hover .proj-title {
+        color: var(--accent);
+      }
+      .proj-no {
+        font-family: var(--mono);
+        font-size: 14px;
+        color: var(--faint);
+      }
+      .proj-title {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 1.5rem;
+        transition: color 0.2s;
+      }
+      .proj-desc {
+        color: var(--muted);
+        margin-top: 10px;
+        max-width: 62ch;
+      }
+      .tags {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .tag {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        padding: 4px 10px;
+        border-radius: 2px;
+      }
+      .proj-link {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--accent);
+        margin-top: 14px;
+        display: inline-block;
+      }
+      @media (max-width: 640px) {
+        .proj {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+      }
+
+      .skill-group + .skill-group {
+        margin-top: 36px;
+      }
+      .skill-group h3 {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .chip {
+        font-family: var(--mono);
+        font-size: 13px;
+        padding: 9px 16px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        color: var(--text);
+        transition: all 0.2s;
+      }
+      .chip:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .chip.core {
+        border-color: rgba(255, 106, 61, 0.4);
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 22px 0;
+        border-top: 1px solid var(--line);
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .row .what {
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 1.15rem;
+      }
+      .row .where {
+        color: var(--muted);
+      }
+      .row .when {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--faint);
+      }
+
+      .contact h2 {
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: clamp(2rem, 5vw, 3.4rem);
+        letter-spacing: -0.02em;
+        max-width: 16ch;
+      }
+      .links {
+        display: flex;
+        gap: 28px;
+        margin-top: 34px;
+        flex-wrap: wrap;
+      }
+      .links a {
+        font-family: var(--mono);
+        font-size: 14px;
+        color: var(--muted);
+        border-bottom: 1px solid transparent;
+        transition: all 0.2s;
+        padding-bottom: 3px;
+      }
+      .links a:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+
+      footer {
+        padding: 40px 0;
+        color: var(--faint);
+        font-family: var(--mono);
+        font-size: 12px;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+      .hero .kicker {
+        animation: fade 0.7s 0.05s both;
+      }
+      .hero h1 {
+        animation: fade 0.8s 0.18s both;
+      }
+      .hero p {
+        animation: fade 0.8s 0.34s both;
+      }
+      .hero .cta {
+        animation: fade 0.8s 0.5s both;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
     </style>
-</head>
+  </head>
+  <body>
+    <header>
+      <div class="wrap nav">
+        <div class="logo">anıl<b>.</b></div>
+        <ul>
+          <li><a href="#about">about</a></li>
+          <li><a href="#work">work</a></li>
+          <li><a href="#skills">skills</a></li>
+          <li><a href="#contact">contact</a></li>
+        </ul>
+      </div>
+    </header>
 
-<body>
-    <h1>This is my nightmare.</h1>
-</body>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="wrap">
+        <div class="kicker">Industrial Engineering × Software</div>
+        <h1>
+          I build <span class="o">optimization</span> &amp; data tools that
+          solve real-world problems.
+        </h1>
+        <p>
+          Industrial engineering student who codes. I turn decision problems —
+          where to place things, how to allocate resources, what to schedule —
+          into mathematical models, and into software that solves them.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#work">View work</a>
+          <a class="btn" href="https://github.com/anilbeter" target="_blank"
+            >GitHub</a
+          >
+        </div>
+      </div>
+    </div>
 
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="wrap">
+        <div class="label">01 / 04 — About</div>
+        <div class="about-grid">
+          <div>
+            <p>
+              I'm Anıl, an industrial engineering student at OSTİM Technical
+              University, close to graduation. My background is analytical —
+              operations research, optimization, modeling — and I write code to
+              put that thinking to work.
+            </p>
+            <p>
+              That intersection is what I care about: not just running a model,
+              but understanding <em>why</em> it behaves the way it does, and
+              building the software around it.
+            </p>
+          </div>
+          <div>
+            <p>
+              Lately I've been deepening the data-science stack (Python, pandas,
+              SQL) and building optimization models with PuLP. I'm also into
+              game development and frontend — I like making things people can
+              actually use.
+            </p>
+            <p>
+              Currently working through the IBM Data Science Professional
+              Certificate.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work">
+      <div class="wrap">
+        <div class="label">02 / 04 — Selected Work</div>
+
+        <div class="proj reveal">
+          <div class="proj-no">/01</div>
+          <div>
+            <div class="proj-title">WIM Sensor Placement Optimization</div>
+            <div class="proj-desc">
+              Graduation thesis. Optimizing weigh-in-motion (WIM) sensor
+              locations across Turkey's national highway network (KGM) — a Set
+              Covering / 0-1 integer linear program that covers the required
+              road segments with the minimum number of sensors. Implemented in
+              Python and GAMS.
+            </div>
+            <div class="tags">
+              <span class="tag">Operations Research</span>
+              <span class="tag">Set Covering / ILP</span>
+              <span class="tag">Python</span>
+              <span class="tag">GAMS</span>
+            </div>
+            <a class="proj-link" href="#">Repository (coming soon)</a>
+          </div>
+        </div>
+
+        <div class="proj reveal">
+          <div class="proj-no">/02</div>
+          <div>
+            <div class="proj-title">Operations Research with Python</div>
+            <div class="proj-desc">
+              Classic OR models implemented from scratch in PuLP — linear
+              programming (product mix), the assignment problem, and set
+              covering — each with its full mathematical formulation and
+              solution analysis.
+            </div>
+            <div class="tags">
+              <span class="tag">Python</span>
+              <span class="tag">PuLP</span>
+              <span class="tag">Linear / Integer Programming</span>
+            </div>
+            <a
+              class="proj-link"
+              href="https://github.com/anilbeter/operations-research-python"
+              target="_blank"
+              >Repository</a
+            >
+          </div>
+        </div>
+
+        <div class="proj reveal">
+          <div class="proj-no">/03</div>
+          <div>
+            <div class="proj-title">Applied Optimization on Real Data</div>
+            <div class="proj-desc">
+              In progress — a real-world dataset turned into an
+              operations-research model: data wrangling with pandas, an
+              optimization formulation, and interpreted results. (Add
+              description + link when ready.)
+            </div>
+            <div class="tags">
+              <span class="tag">pandas</span>
+              <span class="tag">Optimization</span>
+              <span class="tag">Data</span>
+            </div>
+            <a class="proj-link" href="#">Coming soon</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="wrap">
+        <div class="label">03 / 04 — Toolbox</div>
+        <div class="skill-group">
+          <h3>Core</h3>
+          <div class="chips">
+            <span class="chip core">Python</span>
+            <span class="chip core">Operations Research</span>
+            <span class="chip core">Optimization · PuLP / ILP</span>
+            <span class="chip core">pandas</span>
+            <span class="chip core">SQL</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Also</h3>
+          <div class="chips">
+            <span class="chip">JavaScript</span>
+            <span class="chip">React</span>
+            <span class="chip">HTML / CSS</span>
+            <span class="chip">Unity / C#</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 54px">
+          <div class="row">
+            <div>
+              <div class="what">Industrial Engineering</div>
+              <div class="where">OSTİM Technical University</div>
+            </div>
+            <div class="when">B.Sc. — graduating soon</div>
+          </div>
+          <div class="row">
+            <div>
+              <div class="what">IBM Data Science Professional Certificate</div>
+              <div class="where">Coursera</div>
+            </div>
+            <div class="when">in progress</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" style="border-bottom: none">
+      <div class="wrap contact">
+        <div class="label">04 / 04 — Get in touch</div>
+        <h2>Open to opportunities where engineering meets code.</h2>
+        <div class="links">
+          <a href="https://github.com/anilbeter" target="_blank">GitHub</a>
+          <a href="https://www.linkedin.com/in/anilbeter/" target="_blank"
+            >LinkedIn</a
+          >
+          <a href="mailto:anil.beterr@gmail.com">Email</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">© 2026 Anıl Beter.</div>
+    </footer>
+
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    </script>
+  </body>
 </html>
